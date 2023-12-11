@@ -32,10 +32,11 @@ class studentsController extends Controller
     {
         $credenciais = $request->validate([
             'email' => ['required', 'email'],
-            'password' => ['required'],
+            'password' => ['required'], 
         ]);
+        $credenciais['active'] = 1;
 
-        if (Auth::guard('students')->attempt($credenciais)) {
+        if (Auth::guard('students')->attempt($credenciais) ) {
             $request->session()->regenerate();
             return redirect()->route('aluno.atividade');
         }
@@ -55,12 +56,13 @@ class studentsController extends Controller
     }
     public function lista($id)
     {
-        $tarefas = activities::with(['discipline', 'atividadeRes'])->where('discipline_id', '=', $id)->get();
+        $respostasAluno = activities_responses::where('note', '!=', null)->where('student_id', Auth::guard('students')->user()->id)->get()->pluck('activity_id');
+        $tarefas = activities::with(['discipline', 'atividadeRes'])->where('discipline_id', '=', $id)->whereNotIn('id', $respostasAluno)->get();
         return view('aluno.lista', compact('tarefas'));
     }
     public function respondida($id)
     {
-        $listas = activities_responses::with('atividade', 'estudante')->whereRelation('atividade', 'discipline_id', '=', $id)->get();
+        $listas = activities_responses::with('atividade', 'estudante')->whereRelation('atividade', 'discipline_id', '=', $id)->where('student_id', Auth::guard('students')->user()->id)->get();
         return view('aluno.respondida', compact('listas'));
     }
 
@@ -69,5 +71,22 @@ class studentsController extends Controller
         $update = students::find($id)->update($request->all());
         $response['msg'] = 'Atualizado com sucesso!';
         return response()->json($response, 200);
+    }
+    public function dados($id)
+    {
+        $dados = students::find($id);
+        return view('aluno.dados', compact('dados'));
+    }
+    public function editarAluno($id)
+    {
+       $alunos = students::find($id);
+        return view('aluno.editarAluno', compact('alunos'));
+    }
+    public function updateAluno(Request $request, $id)
+    {
+        // dd($request->all());
+        $request['password'] = Hash::make($request->password);
+        students::find($id)->update($request->all());
+        return redirect()->route('aluno.atividade', $id);
     }
 }

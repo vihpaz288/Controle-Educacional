@@ -21,6 +21,12 @@ Route::middleware(['aluno'])->group(function () {
     Route::get('/aluno/respondida/{id}', [studentsController::class, 'respondida'])->name('aluno.respondida');
     Route::get('/aluno/responde/{id}', [activities_responsesController::class, 'create'])->name('aluno.responde');
     Route::post('/aluno/enviado/{id}', [activities_responsesController::class, 'store'])->name('aluno.enviado');
+    Route::get('/aluno/edit/{id}', [activities_responsesController::class, 'editRes'])->name('aluno.edit');
+    Route::put('/atividade/update/{id}', [activities_responsesController::class, 'updateRes'])->name('aluno.update');
+    Route::get('/aluno/dados/{id}', [studentsController::class, 'dados'])->name('aluno.dados');
+    Route::get('/editar/{id}', [studentsController::class, 'editarAluno'])->name('editarAluno');
+    Route::put('/update/dados/{id}', [studentsController::class, 'updateAluno'])->name('updateAluno');
+
 });
 
 Route::middleware(['professor'])->group(function () {

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('check')->nullable();
             $table->double('note')->nullable();
             $table->string('filepath')->nullable();
-            $table->string('description');
+            $table->text('description');
             $table->timestamps();
         });
     }

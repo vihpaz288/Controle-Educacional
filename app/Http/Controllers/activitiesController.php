@@ -16,15 +16,21 @@ class activitiesController extends Controller
     }
     public function store(CadastroAtividadeFormRequest $request, $id)
     {
-        $path = $request->file("filepath")->store('arquivo', 'public');
+        if ($request->file("filepath") == null) {
+            $request->merge([
+                'teatcher_id' => auth()->user()->id,
+                'discipline_id' => $id,
+            ]); 
+        }
+        elseif($request->file("filepath") != null){
+            $request->merge([
+                'filepath' => $request->file("filepath")->store('arquivo', 'public'),
+                'teatcher_id' => auth()->user()->id,
+                'discipline_id' => $id,
+            ]);    
+        }
         $request['discipline_id'] = $id;
-        $atividade = activities::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'discipline_id' => $id,
-            'teatcher_id' => auth()->user()->id,
-            'filepath' => $path,
-        ]);
+        $atividade = activities::create($request->all());
         return redirect()->route('index')->with('msg', 'Atividade criada com sucesso!');
     }
 

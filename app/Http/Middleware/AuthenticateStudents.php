@@ -14,6 +14,7 @@ class AuthenticateStudents
         if (!Auth::guard('students')->check()) {
             return redirect()->route('login.students');
         }
+
         return $next($request);
     }
 }

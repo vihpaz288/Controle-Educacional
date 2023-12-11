@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index estudantes</title>
+    <title>Dados do estudante</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+</head>
 </head>
 
 <body>
@@ -30,16 +31,10 @@
                 </div>
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <i class="fa-solid fa-gear"></i> Opções aluno
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item"
-                                        href="{{ route('aluno.dados', Auth::guard('students')->user()->id) }}"><i
-                                            class="fa-regular fa-pen-to-square"></i> Meus dados </a></li>
-                            </ul>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ route('aluno.atividade') }}"><i
+                                    class="fa-solid fa-house"></i> Home</a>
+                        </li>
                 </div>
                 <div>
                     <a class="navbar-brand position-absolute bottom-0 end-0"
@@ -65,30 +60,22 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th style="color: navy;" scope="col">DISCIPLINA</th>
-                        <th style="color: navy;" scope="col">VER ATIVIDADES</th>
-                        <th style="color: navy;" scope="col">VER ATIVIDADE RESPONDIDAS</th>
+                        <th style="color: navy;" scope="col">Nome</th>
+                        <th style="color: navy;" scope="col">Email</th>
+                        <th style="color: navy;" scope="col">Editar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($materias as $materia)
-                        <tr>
-                            <th scope="row">{{ $materia->id }}</th>
-                            <td>{{ $materia->name }}</td>
-                            <td>
-                                <a class="btn btn-primary" href="{{ route('aluno.lista', $materia->id) }}">VER
-                                    ATIVIDADES</a>
-                            </td>
-                            <td>
-                                <a class="btn btn-primary" href="{{ route('aluno.respondida', $materia->id) }}">VER
-                                    ATIVIDADES RESPONDIDAS</a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    <tr>
+                        <td>{{ $dados->name }}</td>
+                        <td>{{ $dados->email }}</td>
+                        <td><a href="{{ route('editarAluno', $dados->id) }}" class="btn btn-primary btn-block mb-4"
+                                id="enviar">Editar</a></td>
         </div>
+        </tr>
+        </tbody>
+        </table>
+    </div>
     </div>
     </section>
 </body>

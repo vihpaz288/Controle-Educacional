@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responder atividade</title>
+    <title>Atualizar atividade</title>
     <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
@@ -24,18 +24,18 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
                 aria-controls="offcanvasNavbar">
                 <i class="fa-solid fa-arrow-right"></i> Menu 
-              </button>
+            </button>
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
                 aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel"> <i class="fa-solid fa-user"></i>
-                        {{ Auth::guard('students')->user()->name }}</h5>
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><i class="fa-solid fa-user"></i>
+                        {{ Auth::guard('students')->user()->name }} </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ route('aluno.atividade') }}"><i
+                            <a class="nav-link active" aria-current="page" href="{{ route('aluno.atividade') }}"> <i
                                     class="fa-solid fa-house"></i> Home</a>
                         </li>
                         <li class="nav-item dropdown">
@@ -73,21 +73,32 @@
             <div class="card-body py-5 px-md-5">
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-8">
-                        <h2 class="fw-bold mb-5">RESPONDER ATIVIDADE</h2>
+                        <h2 class="fw-bold mb-5">ATUALIZAR ATIVIDADE</h2>
+                        @if ($errors->any())
+                            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                <div>
+                                    @foreach ($errors->all() as $error)
+                                        <li class="error">{{ $error }}</li>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                         <main>
                             <div>
                                 <div class="row">
                                     @if (session('msg'))
-                                        <p class="alert alert-success d-flex align-items-center" role="alert">
+                                        <p class="alert alert-danger d-flex align-items-center" role="alert">
                                             {{ session('msg') }}</p>
                                     @endif
                                 </div>
                             </div>
                         </main>
-                        <form action="{{ route('aluno.enviado', $atividade->id) }}" method="post" id="enviarAtividade"
+                        <form action="{{ route('aluno.update', $atividade->id) }}" method="post" id="enviarAtividade"
                             enctype="multipart/form-data">
                             @csrf
-                            <textarea name="description" id="editor" cols="30" rows="10"></textarea>
+                            @method('PUT')
+                            <textarea name="description" id="editor" cols="30" rows="10">{!! $atividade->description !!}</textarea>
+                            <input type="hidden" name="check" value="visto">
                             <script>
                                 ClassicEditor
                                     .create(document.querySelector('#editor'))
@@ -96,10 +107,13 @@
                                     });
                             </script>
                             <label for="product-image1">Arquivo:</label><br>
+                            <a class="btn btn-primary btn-block mb-2"
+                                href="{{ asset('storage/' . $atividade->filepath) }}" target="_blank">Arquivo
+                                anterior</a>
+
                             <input type="file" id="arquivo" name="filepath"><br><br>
-                            <button type="submit" class="btn btn-primary btn-block mb-4" id="enviar"
-                                onclick='salvar_registro'>
-                                Enviar atividade
+                            <button type="submit" class="btn btn-primary btn-block mb-4" id="enviar">
+                                Atualizar atividade
                             </button>
                         </form>
                     </div>

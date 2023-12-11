@@ -15,7 +15,6 @@ class activities_responsesController extends Controller
 {
     public function create($id)
     {
-        
         $atividade = activities::find($id);
         $aluno = students::find($id);
         return view('aluno.responde', compact('atividade', 'aluno'));
@@ -27,28 +26,57 @@ class activities_responsesController extends Controller
             ->where('activity_id', $id)
             ->first();
         if ($envioAnterior) {
-            return redirect()->back()->with('msg', 'Você pode responder apenas uma vez!');
+            return redirect()->route('aluno.edit', $envioAnterior->id);
         }
 
-        $path = $request->file("filepath")->store('arquivos', 'public');
-        $atividadeRes = activities_responses::create([
-            'activity_id' => $id,
-            'student_id' => Auth::guard('students')->user()->id,
-            'check' => $request->check,
-            'note' => $request->note,
-            'description' => $request->description,
-            'filepath' => $path,
-        ]);
+        if ($request->file("filepath") == null) {
+            $request->merge([
+                'student_id' => Auth::guard('students')->user()->id,
+                'activity_id' => $id,
+            ]); 
+        }
+        elseif($request->file("filepath") != null){
+            $request->merge([
+                'filepath' => $request->file("filepath")->store('arquivo', 'public'),
+                'student_id' => Auth::guard('students')->user()->id,
+                'activity_id' => $id,
+            ]);    
+        }
+        
+        // $path = $request->file("filepath")->store('arquivos', 'public');
+        $atividadeRes = activities_responses::create($request->all());
         return redirect()->route('aluno.responde', $id)->with('msg', 'Atividade respondida com successo!');
+    }
+
+    public function editRes($id)
+    {
+        $atividade = activities_responses::find($id);
+        // dd($atividade);
+        return view('aluno.edit', compact('atividade'));
+
+    }
+    public function updateRes(Request $request, $id)
+    {
+        // dd($request->all());
+        if($request->file("filepath") != null){
+            $request->merge([
+                'filepath' => $request->file("filepath")->store('arquivo', 'public'),
+            ]);    
+        }
+        $atividadeRes = activities_responses::find($id)->update($request->all());
+        
+        return redirect()->route('aluno.atividade', $id)->with('msg', 'Atividade atualizada com sucesso!');
+
     }
     public function editNota( $id)
     {
-        $nota = activities_responses::where('activity_id', '=', $id)->first();
+        $nota = activities_responses::find($id);
         return view('professor.edit', compact('nota'));
     }
     public function update(NotaFormRequest $request, $id)
     {
-        activities_responses::where('activity_id', '=', $id)->first()->update($request->all());
+         
+        activities_responses::find($id)->update($request->all());
         return redirect()->route('edit.nota', $id)->with('msg', 'Nota enviada com sucesso!');
     }
 
