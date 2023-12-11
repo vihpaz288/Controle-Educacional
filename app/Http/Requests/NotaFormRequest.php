@@ -15,7 +15,7 @@ class NotaFormRequest extends FormRequest
         return [
             'note' => [
                 'required',
-               
+
                 'numeric',
             ]
         ];

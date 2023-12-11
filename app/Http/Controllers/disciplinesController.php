@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CadastroDiscFormRequest;
 use App\Models\disciplines;
-use Illuminate\Http\Request;
 
 class disciplinesController extends Controller
 {
@@ -14,8 +13,8 @@ class disciplinesController extends Controller
     }
     public function store(CadastroDiscFormRequest $request)
     {
-       $disciplina = disciplines::create($request->all());
-       return redirect()->route('create.disciplines')->with('msg', 'Disciplina cadastrada com sucesso!');
+        $disciplina = disciplines::create($request->all());
+        return redirect()->route('create.disciplines')->with('msg', 'Disciplina cadastrada com sucesso!');
     }
     public function index()
     {

@@ -20,14 +20,13 @@ class activitiesController extends Controller
             $request->merge([
                 'teatcher_id' => auth()->user()->id,
                 'discipline_id' => $id,
-            ]); 
-        }
-        elseif($request->file("filepath") != null){
+            ]);
+        } elseif ($request->file("filepath") != null) {
             $request->merge([
                 'filepath' => $request->file("filepath")->store('arquivo', 'public'),
                 'teatcher_id' => auth()->user()->id,
                 'discipline_id' => $id,
-            ]);    
+            ]);
         }
         $request['discipline_id'] = $id;
         $atividade = activities::create($request->all());

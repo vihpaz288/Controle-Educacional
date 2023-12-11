@@ -6,7 +6,6 @@ use App\Http\Requests\NotaFormRequest;
 use App\Http\Requests\RespostaFormRequest;
 use App\Models\activities;
 use App\Models\activities_responses;
-use App\Models\disciplines;
 use App\Models\students;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,17 +32,15 @@ class activities_responsesController extends Controller
             $request->merge([
                 'student_id' => Auth::guard('students')->user()->id,
                 'activity_id' => $id,
-            ]); 
-        }
-        elseif($request->file("filepath") != null){
+            ]);
+        } elseif ($request->file("filepath") != null) {
             $request->merge([
                 'filepath' => $request->file("filepath")->store('arquivo', 'public'),
                 'student_id' => Auth::guard('students')->user()->id,
                 'activity_id' => $id,
-            ]);    
+            ]);
         }
-        
-        // $path = $request->file("filepath")->store('arquivos', 'public');
+
         $atividadeRes = activities_responses::create($request->all());
         return redirect()->route('aluno.responde', $id)->with('msg', 'Atividade respondida com successo!');
     }
@@ -51,31 +48,27 @@ class activities_responsesController extends Controller
     public function editRes($id)
     {
         $atividade = activities_responses::find($id);
-        // dd($atividade);
         return view('aluno.edit', compact('atividade'));
-
     }
     public function updateRes(Request $request, $id)
     {
-        // dd($request->all());
-        if($request->file("filepath") != null){
+        if ($request->file("filepath") != null) {
             $request->merge([
                 'filepath' => $request->file("filepath")->store('arquivo', 'public'),
-            ]);    
+            ]);
         }
         $atividadeRes = activities_responses::find($id)->update($request->all());
-        
-        return redirect()->route('aluno.atividade', $id)->with('msg', 'Atividade atualizada com sucesso!');
 
+        return redirect()->route('aluno.atividade', $id)->with('msg', 'Atividade atualizada com sucesso!');
     }
-    public function editNota( $id)
+    public function editNota($id)
     {
         $nota = activities_responses::find($id);
         return view('professor.edit', compact('nota'));
     }
     public function update(NotaFormRequest $request, $id)
     {
-         
+
         activities_responses::find($id)->update($request->all());
         return redirect()->route('edit.nota', $id)->with('msg', 'Nota enviada com sucesso!');
     }

@@ -19,8 +19,8 @@
             <a class="navbar-brand" href=""></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
                 aria-controls="offcanvasNavbar">
-                <i class="fa-solid fa-arrow-right"></i> Menu 
-            </button> 
+                <i class="fa-solid fa-arrow-right"></i> Menu
+            </button>
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
                 aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">

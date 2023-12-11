@@ -26,7 +26,6 @@ Route::middleware(['aluno'])->group(function () {
     Route::get('/aluno/dados/{id}', [studentsController::class, 'dados'])->name('aluno.dados');
     Route::get('/editar/{id}', [studentsController::class, 'editarAluno'])->name('editarAluno');
     Route::put('/update/dados/{id}', [studentsController::class, 'updateAluno'])->name('updateAluno');
-
 });
 
 Route::middleware(['professor'])->group(function () {

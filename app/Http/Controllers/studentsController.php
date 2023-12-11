@@ -32,11 +32,11 @@ class studentsController extends Controller
     {
         $credenciais = $request->validate([
             'email' => ['required', 'email'],
-            'password' => ['required'], 
+            'password' => ['required'],
         ]);
         $credenciais['active'] = 1;
 
-        if (Auth::guard('students')->attempt($credenciais) ) {
+        if (Auth::guard('students')->attempt($credenciais)) {
             $request->session()->regenerate();
             return redirect()->route('aluno.atividade');
         }
@@ -79,12 +79,11 @@ class studentsController extends Controller
     }
     public function editarAluno($id)
     {
-       $alunos = students::find($id);
+        $alunos = students::find($id);
         return view('aluno.editarAluno', compact('alunos'));
     }
     public function updateAluno(Request $request, $id)
     {
-        // dd($request->all());
         $request['password'] = Hash::make($request->password);
         students::find($id)->update($request->all());
         return redirect()->route('aluno.atividade', $id);
